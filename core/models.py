@@ -31,7 +31,13 @@ class Organ(models.Model):
         return str(self.name)
 
 
-class Continent(models.Model):
+REGION_TYPE_CHOICES = {
+    "continent": "continent",
+    "ocean": "ocean",
+}
+
+
+class Region(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField(blank=True)
 
@@ -56,15 +62,15 @@ INORGANIC_ENERGY_SOURCE_CHOICES = {
 class Species(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField()
-    genesis_mya = models.IntegerField()
-    extinction_mya = models.IntegerField()
+    genesis_date_mya = models.IntegerField()
+    extinction_date_mya = models.IntegerField()
     lifetime_years = models.PositiveIntegerField()
     preys_upon = models.ManyToManyField("self", blank=True)
     inorganic_energy_source = models.CharField(
         max_length=16, choices=INORGANIC_ENERGY_SOURCE_CHOICES, null=True, blank=True
     )
-    continent = models.ForeignKey(
-        Continent, on_delete=models.SET_NULL, null=True, related_name="species"
+    region = models.ForeignKey(
+        Region, on_delete=models.SET_NULL, null=True, related_name="species"
     )
     biome = models.ForeignKey(
         Biome, on_delete=models.SET_NULL, null=True, related_name="species"
@@ -79,8 +85,8 @@ class Species(models.Model):
 
     def _time_periods_overlap(self, other_species):
         return (
-            self.genesis_mya <= other_species.extinction_mya
-            and other_species.genesis_mya <= self.extinction_mya
+            self.genesis_date_mya <= other_species.extinction_date_mya
+            and other_species.genesis_date_mya <= self.extinction_date_mya
         )
 
     def __str__(self):

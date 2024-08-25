@@ -3,7 +3,7 @@ from django.contrib import admin
 from django.contrib import admin
 from django import forms
 from django.core.exceptions import ValidationError
-from .models import TimePeriod, OrganSystem, Organ, Continent, Biome, Species
+from .models import TimePeriod, OrganSystem, Organ, Region, Biome, Species
 
 
 @admin.register(TimePeriod)
@@ -19,8 +19,8 @@ class OrganSystemAdmin(admin.ModelAdmin):
     search_fields = ("name",)
 
 
-@admin.register(Continent)
-class ContinentAdmin(admin.ModelAdmin):
+@admin.register(Region)
+class RegionAdmin(admin.ModelAdmin):
     list_display = ("name",)
     search_fields = ("name",)
 
@@ -61,15 +61,15 @@ class SpeciesAdmin(admin.ModelAdmin):
     form = SpeciesForm
     list_display = (
         "name",
-        "genesis_mya",
-        "extinction_mya",
+        "genesis_date_mya",
+        "extinction_date_mya",
         "lifetime_years",
-        "continent",
+        "region",
         "biome",
         "ancestor",
     )
     search_fields = ("name", "description")
-    list_filter = ("inorganic_energy_source", "continent", "biome")
+    list_filter = ("inorganic_energy_source", "region", "biome")
     filter_horizontal = ("preys_upon",)
     autocomplete_fields = ("ancestor",)
     inlines = [OrganInline]
