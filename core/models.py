@@ -40,6 +40,7 @@ REGION_TYPE_CHOICES = {
 class Region(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField(blank=True)
+    region_type = models.CharField(max_length=16, choices=REGION_TYPE_CHOICES)
 
     def __str__(self):
         return str(self.name)
